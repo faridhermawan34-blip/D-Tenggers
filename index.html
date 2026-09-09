@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D'Tengger - Double Track SMAN 1 Sumber Probolinggo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neon: {
+                            DEFAULT: '#E3FF00', // Lemon Neon Yellow
+                            hover: '#c6e000',
+                            glow: 'rgba(227, 255, 0, 0.4)',
+                            dark: '#0f1400'
+                        },
+                        dark: {
+                            base: '#0B0F17',
+                            card: '#131A26',
+                            lighter: '#1E293B',
+                            border: '#2A364F'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-shadow {
+            box-shadow: 0 0 20px rgba(227, 255, 0, 0.25);
+        }
+        .neon-text-glow {
+            text-shadow: 0 0 10px rgba(227, 255, 0, 0.5);
+        }
+        .neon-border-glow {
+            box-shadow: 0 0 10px rgba(227, 255, 0, 0.3), inset 0 0 10px rgba(227, 255, 0, 0.1);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A364F;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E3FF00;
+        }
+    </style>
+</head>
+<body class="bg-dark-base text-gray-200 font-sans antialiased min-h-screen flex flex-col selection:bg-neon selection:text-black">
+
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- Top Bar & Main Navbar -->
+    <header class="sticky top-0 z-40 bg-dark-base/90 backdrop-blur-md border-b border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & School Brand -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-11 h-11 rounded-xl bg-neon flex items-center justify-center font-heading text-black font-black text-2xl shadow-[0_0_15px_rgba(227,255,0,0.5)]">
+                        DT
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-2xl tracking-wider text-white flex items-center gap-1">
+                            D'TENGGER <span class="text-neon text-xs px-2 py-0.5 rounded bg-neon/10 border border-neon/30 font-sans font-semibold">DOUBLE TRACK</span>
+                        </span>
+                        <p class="text-xs text-gray-400 font-medium">SMAN 1 Sumber - Kab. Probolinggo</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <a href="#beranda" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-neon transition-colors text-white">Beranda</a>
+                    <a href="#profil" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-neon transition-colors text-gray-300">Profil</a>
+                    <a href="#keterampilan" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-neon transition-colors text-gray-300">Keterampilan</a>
+                    <a href="#galeri" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-neon transition-colors text-gray-300">Galeri Karya</a>
+                    <a href="#absensi" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-neon transition-colors text-gray-300">Absensi Kegiatan</a>
+                    <a href="#sosmed" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-neon transition-colors text-gray-300">Media Sosial</a>
+                </nav>
+
+                <!-- Action & Login Buttons -->
+                <div class="hidden md:flex items-center space-x-3">
+                    <span id="userStatusBadge" class="hidden px-2.5 py-1 text-xs rounded-full font-semibold bg-gray-800 text-gray-300 border border-gray-700">
+                        <i class="fa-solid font-normal fa-user mr-1"></i> Tamu
+                    </span>
+                    <button onclick="openLoginModal()" id="loginBtn" class="bg-neon text-black font-bold px-4 py-2 rounded-lg text-sm hover:bg-neon-hover transition-all duration-300 neon-shadow flex items-center gap-2">
+                        <i class="fa-solid fa-right-to-bracket"></i> Login Portal
+                    </button>
+                    <button onclick="logout()" id="logoutBtn" class="hidden bg-red-600/20 text-red-400 border border-red-500/30 font-bold px-4 py-2 rounded-lg text-sm hover:bg-red-600 hover:text-white transition-all duration-300 flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-dark-card border-b border-dark-border px-4 pt-2 pb-4 space-y-2">
+            <a href="#beranda" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-dark-border">Beranda</a>
+            <a href="#profil" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-dark-border">Profil</a>
+            <a href="#keterampilan" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-dark-border">Keterampilan</a>
+            <a href="#galeri" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-dark-border">Galeri Karya</a>
+            <a href="#absensi" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-dark-border">Absensi Kegiatan</a>
+            <a href="#sosmed" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-dark-border">Media Sosial</a>
+            <div class="pt-2 border-t border-dark-border flex flex-col gap-2">
+                <button onclick="openLoginModal(); toggleMobileMenu();" class="w-full bg-neon text-black font-bold py-2 rounded-lg text-center text-sm">
+                    <i class="fa-solid fa-right-to-bracket mr-1"></i> Login Portal
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section id="beranda" class="relative overflow-hidden py-16 md:py-24 bg-gradient-to-b from-dark-base via-dark-card to-dark-base">
+            <!-- Neon background glows -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-neon/10 rounded-full blur-[120px] pointer-events-none"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-dark-lighter border border-neon/30 text-neon text-xs font-semibold uppercase tracking-wider">
+                            <i class="fa-solid fa-volcano"></i> SMAN 1 Sumber - Kaki Gunung Bromo
+                        </div>
+                        <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
+                            Membekali Mandiri, <br/>
+                            <span class="text-neon neon-text-glow">Mengukir Karya Tengger</span>
+                        </h1>
+                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                            Website Resmi Program <strong class="text-white">Double Track SMAN 1 Sumber Kabupaten Probolinggo</strong>. Wadah pelatihan keterampilan vokasi terpadu untuk menyiapkan lulusan siap kerja & berwirausaha mandiri.
+                        </p>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                            <a href="#keterampilan" class="bg-neon text-black font-extrabold px-6 py-3.5 rounded-xl hover:bg-neon-hover transition-all duration-300 shadow-[0_0_20px_rgba(227,255,0,0.4)] flex items-center gap-2">
+                                <i class="fa-solid fa-shapes"></i> Jelajahi Keterampilan
+                            </a>
+                            <a href="#absensi" class="bg-dark-lighter hover:bg-dark-border text-white border border-dark-border px-6 py-3.5 rounded-xl font-bold transition-all duration-300 flex items-center gap-2">
+                                <i class="fa-solid fa-clipboard-user text-neon"></i> Presensi Kegiatan
+                            </a>
+                        </div>
+
+                        <!-- Stats Quick Bar -->
+                        <div class="grid grid-cols-3 gap-4 pt-8 border-t border-dark-border/80">
+                            <div>
+                                <span class="font-heading text-3xl font-extrabold text-neon">6</span>
+                                <p class="text-xs text-gray-400 font-medium">Bidang Keahlian</p>
+                            </div>
+                            <div>
+                                <span class="font-heading text-3xl font-extrabold text-white">14+</span>
+                                <p class="text-xs text-gray-400 font-medium">Sub-Keterampilan</p>
+                            </div>
+                            <div>
+                                <span class="font-heading text-3xl font-extrabold text-neon">100%</span>
+                                <p class="text-xs text-gray-400 font-medium">Karya Siswa Tengger</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Visual Card Showcase -->
+                    <div class="lg:col-span-5">
+                        <div class="relative rounded-2xl p-1 bg-gradient-to-b from-neon/40 via-dark-border to-dark-card shadow-2xl">
+                            <div class="bg-dark-card rounded-xl overflow-hidden p-6 space-y-6">
+                                <div class="flex items-center justify-between border-b border-dark-border pb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    </div>
+                                    <span class="text-xs font-mono text-neon font-semibold">DT-SMANSABER v2.6</span>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <div class="p-4 rounded-xl bg-dark-lighter border border-dark-border flex items-center gap-4 hover:border-neon/50 transition-all">
+                                        <div class="p-3 bg-neon/10 text-neon rounded-lg">
+                                            <i class="fa-solid fa-camera text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-white font-bold text-sm">Multimedia & Kreatif</h4>
+                                            <p class="text-xs text-gray-400">Desain Grafis, Video & Fotografi</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 rounded-xl bg-dark-lighter border border-dark-border flex items-center gap-4 hover:border-neon/50 transition-all">
+                                        <div class="p-3 bg-neon/10 text-neon rounded-lg">
+                                            <i class="fa-solid fa-utensils text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-white font-bold text-sm">Tata Boga & Culinary</h4>
+                                            <p class="text-xs text-gray-400">Pastry Bakery, Kuliner Nusantara</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 rounded-xl bg-dark-lighter border border-dark-border flex items-center gap-4 hover:border-neon/50 transition-all">
+                                        <div class="p-3 bg-neon/10 text-neon rounded-lg">
+                                            <i class="fa-solid fa-motorcycle text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-white font-bold text-sm">Teknik & Otomotif</h4>
+                                            <p class="text-xs text-gray-400">Tune Up Motor & Perbaikan Elektonika</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 rounded-xl bg-neon/10 border border-neon/30 text-center">
+                                    <p class="text-xs text-neon font-semibold">
+                                        <i class="fa-solid fa-star mr-1"></i> Program Akselerasi Kewirausahaan Siswa SMAN 1 Sumber
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profil Section -->
+        <section id="profil" class="py-20 bg-dark-base border-t border-dark-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-neon mb-2">Tentang Kami</h2>
+                    <h3 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Profil Double Track "D'Tengger"</h3>
+                    <div class="w-20 h-1 bg-neon mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 text-gray-300">
+                        <p class="leading-relaxed">
+                            Program <strong class="text-white">Double Track SMAN 1 Sumber</strong> merupakan inovasi pendidikan terpadu yang memadukan kurikulum SMA reguler dengan pelatihan keterampilan vokasi (keterampilan kerja). Program ini khusus dirancang untuk membekali para siswa di kawasan dataran tinggi Tengger, Kabupaten Probolinggo.
+                        </p>
+                        <p class="leading-relaxed">
+                            Dengan branding <strong class="text-neon">"D'Tengger"</strong>, kami berkomitmen mencetak lulusan SMA yang tak hanya siap melanjutkan ke perguruan tinggi, namun juga memiliki kecakapan hidup (*life skills*), sertifikasi keterampilan, serta mentalitas wirausaha mandiri yang dapat memajukan potensi lokal daerah Sumber dan sekitarnya.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                            <div class="p-4 rounded-xl bg-dark-card border border-dark-border">
+                                <h4 class="font-bold text-white mb-1 flex items-center gap-2">
+                                    <i class="fa-solid fa-bullseye text-neon"></i> Visi Utama
+                                </h4>
+                                <p class="text-xs text-gray-400">Terwujudnya lulusan yang berkarakter, terampil, inovatif, dan mandiri secara ekonomi.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-dark-card border border-dark-border">
+                                <h4 class="font-bold text-white mb-1 flex items-center gap-2">
+                                    <i class="fa-solid fa-rocket text-neon"></i> Misi Vokasi
+                                </h4>
+                                <p class="text-xs text-gray-400">Menyelenggarakan pelatihan standar industri dengan pembina dan instruktur profesional.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leadership / School Info Card -->
+                    <div class="bg-dark-card border border-dark-border rounded-2xl p-8 relative overflow-hidden shadow-xl">
+                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-neon/5 rounded-full blur-2xl"></div>
+                        
+                        <div class="flex items-center gap-4 mb-6 pb-6 border-b border-dark-border">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-neon to-yellow-500 p-0.5">
+                                <div class="w-full h-full bg-dark-card rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-user-tie text-2xl text-neon"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">SMAN 1 Sumber Probolinggo</h4>
+                                <p class="text-xs text-neon font-mono">Kabupaten Probolinggo, Jawa Timur</p>
+                                <span class="inline-block mt-1 text-[11px] bg-dark-lighter text-gray-300 px-2 py-0.5 rounded border border-dark-border">
+                                    Penyelenggara Program Double Track
+                                </span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-location-dot text-neon mt-1"></i>
+                                <span>Kecamatan Sumber, Kabupaten Probolinggo, Jawa Timur 67263</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-graduation-cap text-neon mt-1"></i>
+                                <span>Mitra Pelatihan: ITS Surabaya & Dinas Pendidikan Provinsi Jawa Timur</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-certificate text-neon mt-1"></i>
+                                <span>Sertifikasi resmi kompetensi keahlian bagi setiap peserta didik.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keterampilan Section (Detailed Sub-Skills Included) -->
+        <section id="keterampilan" class="py-20 bg-dark-card border-t border-dark-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-neon mb-2">Program Keahlian</h2>
+                    <h3 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">6 Bidang Keterampilan D'Tengger</h3>
+                    <p class="text-gray-400 text-sm mt-3">Pilih kategori untuk melihat sub-bidang keahlian dan materi pelatihan</p>
+                    <div class="w-20 h-1 bg-neon mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <!-- Skill Tabs Navigation -->
+                <div class="flex flex-wrap justify-center gap-2 mb-10" id="skillTabs">
+                    <button onclick="switchSkillTab('all')" class="tab-btn active px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-neon text-black">
+                        Semua Keterampilan
+                    </button>
+                    <button onclick="switchSkillTab('multimedia')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold bg-dark-lighter text-gray-300 hover:text-white hover:bg-dark-border transition-all">
+                        <i class="fa-solid fa-film mr-1.5 text-neon"></i> Multimedia
+                    </button>
+                    <button onclick="switchSkillTab('boga')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold bg-dark-lighter text-gray-300 hover:text-white hover:bg-dark-border transition-all">
+                        <i class="fa-solid fa-utensils mr-1.5 text-neon"></i> Tata Boga
+                    </button>
+                    <button onclick="switchSkillTab('rias')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold bg-dark-lighter text-gray-300 hover:text-white hover:bg-dark-border transition-all">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-neon"></i> Tata Rias
+                    </button>
+                    <button onclick="switchSkillTab('busana')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold bg-dark-lighter text-gray-300 hover:text-white hover:bg-dark-border transition-all">
+                        <i class="fa-solid fa-scissors mr-1.5 text-neon"></i> Tata Busana
+                    </button>
+                    <button onclick="switchSkillTab('elektronika')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold bg-dark-lighter text-gray-300 hover:text-white hover:bg-dark-border transition-all">
+                        <i class="fa-solid fa-microchip mr-1.5 text-neon"></i> Elektronika
+                    </button>
+                    <button onclick="switchSkillTab('otomotif')" class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold bg-dark-lighter text-gray-300 hover:text-white hover:bg-dark-border transition-all">
+                        <i class="fa-solid fa-wrench mr-1.5 text-neon"></i> Tune Up Motor
+                    </button>
+                </div>
+
+                <!-- Skill Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="skillsGrid">
+
+                    <!-- 1. MULTIMEDIA -->
+                    <div class="skill-card category-multimedia bg-dark-base border border-dark-border hover:border-neon/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/30 text-neon flex items-center justify-center text-2xl mb-4">
+                                <i class="fa-solid fa-photo-film"></i>
+                            </div>
+                            <span class="text-xs font-mono text-neon uppercase tracking-wider font-semibold">Vokasi IT & Kreatif</span>
+                            <h4 class="text-xl font-bold text-white mt-1 mb-3">Multimedia</h4>
+                            <p class="text-xs text-gray-400 mb-4">Penguasaan konten visual digital modern, branding media sosial, serta dokumentasi kreatif.</p>
+                            
+                            <!-- Sub Skills Badges -->
+                            <div class="space-y-2 border-t border-dark-border pt-4">
+                                <span class="text-xs text-gray-400 font-semibold block">Sub-Keterampilan Spesialis:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-vector-square text-neon"></i> Desain Grafis
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-video text-neon"></i> Video Editing
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-camera text-neon"></i> Fotografi
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-dark-lighter/40 border-t border-dark-border flex justify-between items-center">
+                            <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 80 Jam Pelatihan</span>
+                            <button onclick="showSkillDetail('Multimedia', ['Desain Grafis (Photoshop & Illustrator)', 'Video Editing (Premiere Pro & CapCut Desktop)', 'Fotografi Produk & Landscape Tengger'])" class="text-xs text-neon hover:underline font-bold">Detail Materi &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. TATA BOGA -->
+                    <div class="skill-card category-boga bg-dark-base border border-dark-border hover:border-neon/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/30 text-neon flex items-center justify-center text-2xl mb-4">
+                                <i class="fa-solid fa-kitchen-set"></i>
+                            </div>
+                            <span class="text-xs font-mono text-neon uppercase tracking-wider font-semibold">Kuliner & Bisnis</span>
+                            <h4 class="text-xl font-bold text-white mt-1 mb-3">Tata Boga</h4>
+                            <p class="text-xs text-gray-400 mb-4">Pengolahan makanan khas, teknik bakery modern, dan penyajian kuliner bernilai jual tinggi.</p>
+                            
+                            <!-- Sub Skills Badges -->
+                            <div class="space-y-2 border-t border-dark-border pt-4">
+                                <span class="text-xs text-gray-400 font-semibold block">Sub-Keterampilan Spesialis:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-glass-water text-neon"></i> Makanan Ringan & Minuman
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-bowl-food text-neon"></i> Pembuatan Makanan Indonesia
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-bread-slice text-neon"></i> Pengolahan Pastry Bakery
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-dark-lighter/40 border-t border-dark-border flex justify-between items-center">
+                            <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 86 Jam Pelatihan</span>
+                            <button onclick="showSkillDetail('Tata Boga', ['Makanan Ringan & Minuman Kekinian', 'Resep & Pembuatan Makanan Tradisional Indonesia', 'Pengolahan Roti, Pastry & Cake'])" class="text-xs text-neon hover:underline font-bold">Detail Materi &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. TATA RIAS -->
+                    <div class="skill-card category-rias bg-dark-base border border-dark-border hover:border-neon/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/30 text-neon flex items-center justify-center text-2xl mb-4">
+                                <i class="fa-solid fa-sparkles"></i>
+                            </div>
+                            <span class="text-xs font-mono text-neon uppercase tracking-wider font-semibold">Kecantikan & Salon</span>
+                            <h4 class="text-xl font-bold text-white mt-1 mb-3">Tata Rias</h4>
+                            <p class="text-xs text-gray-400 mb-4">Seni rias wajah profesional untuk acara panggung, perawatan rambut, dan rias pengantin modern.</p>
+                            
+                            <!-- Sub Skills Badges -->
+                            <div class="space-y-2 border-t border-dark-border pt-4">
+                                <span class="text-xs text-gray-400 font-semibold block">Sub-Keterampilan Spesialis:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-masks-theater text-neon"></i> Tata Rias Panggung
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-scissors text-neon"></i> Tata Kecantikan Rambut
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-heart text-neon"></i> Tata Rias Pengantin Berhijab
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-dark-lighter/40 border-t border-dark-border flex justify-between items-center">
+                            <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 74 Jam Pelatihan</span>
+                            <button onclick="showSkillDetail('Tata Rias', ['Make Up Panggung & Seni Pertunjukan', 'Styling & Perawatan Kecantikan Rambut', 'Rias Pengantin Hijab Modern & Tradisional'])" class="text-xs text-neon hover:underline font-bold">Detail Materi &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- 4. TATA BUSANA -->
+                    <div class="skill-card category-busana bg-dark-base border border-dark-border hover:border-neon/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/30 text-neon flex items-center justify-center text-2xl mb-4">
+                                <i class="fa-solid fa-shirt"></i>
+                            </div>
+                            <span class="text-xs font-mono text-neon uppercase tracking-wider font-semibold">Fashion & Garment</span>
+                            <h4 class="text-xl font-bold text-white mt-1 mb-3">Tata Busana</h4>
+                            <p class="text-xs text-gray-400 mb-4">Perancangan pola busana, teknik menjahit, dan kreasi busana muslim serta fashion trend terkini.</p>
+                            
+                            <!-- Sub Skills Badges -->
+                            <div class="space-y-2 border-t border-dark-border pt-4">
+                                <span class="text-xs text-gray-400 font-semibold block">Sub-Keterampilan Spesialis:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-person-dress text-neon"></i> Merancang Busana Muslim
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-compass-drafting text-neon"></i> Merancang Mode Busana
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-dark-lighter/40 border-t border-dark-border flex justify-between items-center">
+                            <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 80 Jam Pelatihan</span>
+                            <button onclick="showSkillDetail('Tata Busana', ['Desain Sketsa & Merancang Busana Muslim', 'Pembuatan Pola & Merancang Mode Busana', 'Teknik Menjahit & Finishing Pakaian'])" class="text-xs text-neon hover:underline font-bold">Detail Materi &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- 5. ELEKTRONIKA -->
+                    <div class="skill-card category-elektronika bg-dark-base border border-dark-border hover:border-neon/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/30 text-neon flex items-center justify-center text-2xl mb-4">
+                                <i class="fa-solid fa-plug-circle-bolt"></i>
+                            </div>
+                            <span class="text-xs font-mono text-neon uppercase tracking-wider font-semibold">Teknik Elektro</span>
+                            <h4 class="text-xl font-bold text-white mt-1 mb-3">Perawatan Elektronika</h4>
+                            <p class="text-xs text-gray-400 mb-4">Teknik identifikasi kerusakan, pemeliharaan, dan perbaikan perangkat elektronik rumah tangga.</p>
+                            
+                            <!-- Sub Skills Badges -->
+                            <div class="space-y-2 border-t border-dark-border pt-4">
+                                <span class="text-xs text-gray-400 font-semibold block">Sub-Keterampilan Spesialis:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-screwdriver-wrench text-neon"></i> Perawatan Alat Elektronika
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-triangle-exclamation text-neon"></i> Perbaikan Alat Elektronika
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-dark-lighter/40 border-t border-dark-border flex justify-between items-center">
+                            <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 76 Jam Pelatihan</span>
+                            <button onclick="showSkillDetail('Perawatan Elektronika', ['Pengukuran Komponen & Multitester', 'Teknik Solder & Desolder Rangkaian', 'Troubleshooting Alat Rumah Tangga'])" class="text-xs text-neon hover:underline font-bold">Detail Materi &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- 6. OTOMOTIF TUNE UP MOTOR -->
+                    <div class="skill-card category-otomotif bg-dark-base border border-dark-border hover:border-neon/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/30 text-neon flex items-center justify-center text-2xl mb-4">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <span class="text-xs font-mono text-neon uppercase tracking-wider font-semibold">Teknik Otomotif</span>
+                            <h4 class="text-xl font-bold text-white mt-1 mb-3">Tune Up Sepeda Motor</h4>
+                            <p class="text-xs text-gray-400 mb-4">Servis berkala mesin kendaraan roda dua, pemeliharaan sistem injeksi (EFI), dan karburator.</p>
+                            
+                            <!-- Sub Skills Badges -->
+                            <div class="space-y-2 border-t border-dark-border pt-4">
+                                <span class="text-xs text-gray-400 font-semibold block">Sub-Keterampilan Spesialis:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-oil-can text-neon"></i> Servis Berkala Mesin
+                                    </span>
+                                    <span class="bg-dark-lighter text-gray-200 border border-dark-border text-xs px-2.5 py-1 rounded-md flex items-center gap-1">
+                                        <i class="fa-solid fa-gears text-neon"></i> System Tune-Up Motor
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-dark-lighter/40 border-t border-dark-border flex justify-between items-center">
+                            <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 84 Jam Pelatihan</span>
+                            <button onclick="showSkillDetail('Tune Up Sepeda Motor', ['Pemeriksaan & Servis Karburator/Injeksi', 'Perawatan Sistem Rem & Transmisi CVT', 'Diagnosa Kerusakan Mesin Roda 2'])" class="text-xs text-neon hover:underline font-bold">Detail Materi &rarr;</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Galeri Open Access Section (Foto & Video) -->
+        <section id="galeri" class="py-20 bg-dark-base border-t border-dark-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <h2 class="text-xs font-bold uppercase tracking-widest text-neon mb-2">Dokumentasi & Portofolio</h2>
+                        <h3 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Galeri Karya Open Access</h3>
+                        <p class="text-gray-400 text-sm mt-2">Wadah terbuka bagi siswa, instruktur, dan umum untuk mempublikasikan foto & video kegiatan vokasi.</p>
+                        <div class="w-20 h-1 bg-neon mt-4 rounded-full"></div>
+                    </div>
+
+                    <!-- Open Access Upload CTA Button -->
+                    <button onclick="openUploadModal()" class="self-start md:self-auto bg-neon text-black font-extrabold px-6 py-3.5 rounded-xl hover:bg-neon-hover transition-all duration-300 neon-shadow flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
+                        <span>+ Unggah Foto / Video Karya</span>
+                    </button>
+                </div>
+
+                <!-- Gallery Category & Type Filters -->
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-8 bg-dark-card p-3 rounded-2xl border border-dark-border">
+                    <!-- Filter Media Type -->
+                    <div class="flex flex-wrap gap-2" id="galleryTypeFilters">
+                        <button onclick="filterGallery('type', 'all')" class="gallery-type-btn active px-4 py-2 rounded-xl text-xs font-bold transition-all bg-neon text-black">
+                            <i class="fa-solid fa-border-all mr-1"></i> Semua Media
+                        </button>
+                        <button onclick="filterGallery('type', 'photo')" class="gallery-type-btn px-4 py-2 rounded-xl text-xs font-bold bg-dark-lighter text-gray-300 hover:text-white transition-all">
+                            <i class="fa-solid fa-image text-neon mr-1"></i> Foto (2D/3D)
+                        </button>
+                        <button onclick="filterGallery('type', 'video')" class="gallery-type-btn px-4 py-2 rounded-xl text-xs font-bold bg-dark-lighter text-gray-300 hover:text-white transition-all">
+                            <i class="fa-solid fa-circle-play text-neon mr-1"></i> Video Praktik
+                        </button>
+                    </div>
+
+                    <!-- Search Input inside Gallery -->
+                    <div class="relative w-full sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" id="gallerySearchInput" onkeyup="searchGallery()" placeholder="Cari karya / pembuat..." class="w-full bg-dark-lighter border border-dark-border text-white text-xs pl-9 pr-4 py-2 rounded-xl focus:outline-none focus:border-neon">
+                    </div>
+                </div>
+
+                <!-- Gallery Grid Container -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="galleryGrid">
+                    <!-- Dynamic Gallery Items Rendered via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Absensi Kegiatan Section -->
+        <section id="absensi" class="py-20 bg-dark-base border-t border-dark-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-neon mb-2">Presensi Digital</h2>
+                    <h3 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Absensi Kegiatan Double Track</h3>
+                    <p class="text-gray-400 text-sm mt-3">Pencatatan kehadiran Pemateri, Peserta, serta Materi pelatihan secara real-time</p>
+                    <div class="w-20 h-1 bg-neon mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Form Input Absensi (5 Cols) -->
+                    <div class="lg:col-span-5 bg-dark-card border border-dark-border rounded-2xl p-6 shadow-xl">
+                        <div class="flex items-center justify-between pb-4 mb-6 border-b border-dark-border">
+                            <h4 class="font-bold text-white text-lg flex items-center gap-2">
+                                <i class="fa-solid fa-pen-to-square text-neon"></i> Form Input Presensi
+                            </h4>
+                            <span class="text-xs bg-neon/10 text-neon px-2.5 py-1 rounded-full border border-neon/30 font-semibold">Aktif Hari Ini</span>
+                        </div>
+
+                        <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Peran Akses / Status</label>
+                                <select id="attRole" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                                    <option value="Peserta">Siswa / Peserta Double Track</option>
+                                    <option value="Pemateri">Pemateri / Instruktur Trainer</option>
+                                    <option value="Panitia">Panitia / Admin Kegiatan</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Nama Lengkap</label>
+                                <input type="text" id="attName" placeholder="Contoh: Budi Santoso / Ir. Supriyadi" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Bidang Keterampilan</label>
+                                <select id="attCategory" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                                    <option value="Multimedia">Multimedia (Grafis/Video/Foto)</option>
+                                    <option value="Tata Boga">Tata Boga (Kue/Masakan/Minuman)</option>
+                                    <option value="Tata Rias">Tata Rias (Panggung/Rambut/Hijab)</option>
+                                    <option value="Tata Busana">Tata Busana (Muslim/Mode Fashion)</option>
+                                    <option value="Elektronika">Perawatan & Perbaikan Elektronika</option>
+                                    <option value="Tune Up Motor">Tune Up Sepeda Motor</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Judul Topik / Materi Pelatihan</label>
+                                <input type="text" id="attTopic" placeholder="Contoh: Praktik Pengolahan Pastry & Bakery Pagi" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-300 mb-1">Keterangan Kehadiran</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <label class="flex items-center justify-center p-2 rounded-xl bg-dark-lighter border border-dark-border cursor-pointer hover:border-neon/40 has-[:checked]:border-neon has-[:checked]:bg-neon/10">
+                                        <input type="radio" name="attStatus" value="Hadir" checked class="hidden">
+                                        <span class="text-xs text-white font-medium"><i class="fa-solid fa-circle-check text-green-400 mr-1"></i> Hadir</span>
+                                    </label>
+                                    <label class="flex items-center justify-center p-2 rounded-xl bg-dark-lighter border border-dark-border cursor-pointer hover:border-neon/40 has-[:checked]:border-neon has-[:checked]:bg-neon/10">
+                                        <input type="radio" name="attStatus" value="Izin" class="hidden">
+                                        <span class="text-xs text-white font-medium"><i class="fa-solid fa-clock text-yellow-400 mr-1"></i> Izin</span>
+                                    </label>
+                                    <label class="flex items-center justify-center p-2 rounded-xl bg-dark-lighter border border-dark-border cursor-pointer hover:border-neon/40 has-[:checked]:border-neon has-[:checked]:bg-neon/10">
+                                        <input type="radio" name="attStatus" value="Sakit" class="hidden">
+                                        <span class="text-xs text-white font-medium"><i class="fa-solid fa-notes-medical text-red-400 mr-1"></i> Sakit</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-neon text-black font-extrabold py-3 rounded-xl hover:bg-neon-hover transition-all duration-300 neon-shadow mt-2 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Simpan Presensi Kehadiran
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Rekap & Table Log Absensi (7 Cols) -->
+                    <div class="lg:col-span-7 bg-dark-card border border-dark-border rounded-2xl p-6 shadow-xl flex flex-col">
+                        <div class="flex flex-wrap items-center justify-between pb-4 mb-4 border-b border-dark-border gap-2">
+                            <div>
+                                <h4 class="font-bold text-white text-lg flex items-center gap-2">
+                                    <i class="fa-solid fa-list-check text-neon"></i> Rekap Presensi Terkini
+                                </h4>
+                                <p class="text-xs text-gray-400">Log kehadiran kegiatan SMAN 1 Sumber Double Track</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="tableSearch" onkeyup="filterTable()" placeholder="Cari nama/materi..." class="bg-dark-lighter text-xs text-white px-3 py-1.5 rounded-lg border border-dark-border focus:outline-none focus:border-neon">
+                                <button onclick="clearAttendanceLog()" class="text-xs text-red-400 hover:text-red-300 bg-red-500/10 px-2.5 py-1.5 rounded-lg border border-red-500/20" title="Reset Log">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table Scroll Container -->
+                        <div class="overflow-x-auto flex-grow max-h-[380px] overflow-y-auto">
+                            <table class="w-full text-left text-xs text-gray-300" id="attendanceTable">
+                                <thead class="bg-dark-lighter text-gray-200 sticky top-0 uppercase text-[10px] font-mono tracking-wider">
+                                    <tr>
+                                        <th class="p-3">Waktu</th>
+                                        <th class="p-3">Nama & Peran</th>
+                                        <th class="p-3">Bidang / Keterampilan</th>
+                                        <th class="p-3">Materi Pelatihan</th>
+                                        <th class="p-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-dark-border" id="attendanceLogBody">
+                                    <!-- Seed Data 1 -->
+                                    <tr class="hover:bg-dark-lighter/50 transition-colors">
+                                        <td class="p-3 font-mono text-gray-400">08:15 WIB</td>
+                                        <td class="p-3">
+                                            <div class="font-bold text-white">Drs. Ahmad Rifai</div>
+                                            <span class="text-[10px] px-1.5 py-0.2 bg-neon/10 text-neon rounded">Pemateri</span>
+                                        </td>
+                                        <td class="p-3">Tune Up Motor</td>
+                                        <td class="p-3">Servis Sistem Injeksi & EFI</td>
+                                        <td class="p-3 text-center">
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">Hadir</span>
+                                        </td>
+                                    </tr>
+                                    <!-- Seed Data 2 -->
+                                    <tr class="hover:bg-dark-lighter/50 transition-colors">
+                                        <td class="p-3 font-mono text-gray-400">08:22 WIB</td>
+                                        <td class="p-3">
+                                            <div class="font-bold text-white">Siti Rahmawati</div>
+                                            <span class="text-[10px] px-1.5 py-0.2 bg-blue-500/10 text-blue-400 rounded">Peserta</span>
+                                        </td>
+                                        <td class="p-3">Tata Boga</td>
+                                        <td class="p-3">Pengolahan Pastry & Bakery</td>
+                                        <td class="p-3 text-center">
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">Hadir</span>
+                                        </td>
+                                    </tr>
+                                    <!-- Seed Data 3 -->
+                                    <tr class="hover:bg-dark-lighter/50 transition-colors">
+                                        <td class="p-3 font-mono text-gray-400">08:30 WIB</td>
+                                        <td class="p-3">
+                                            <div class="font-bold text-white">Dewi Lestari</div>
+                                            <span class="text-[10px] px-1.5 py-0.2 bg-blue-500/10 text-blue-400 rounded">Peserta</span>
+                                        </td>
+                                        <td class="p-3">Tata Rias</td>
+                                        <td class="p-3">Rias Pengantin Berhijab Modern</td>
+                                        <td class="p-3 text-center">
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">Hadir</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kepala Sekolah & Admin Special Panel Section (Visible when logged in) -->
+        <section id="dashboardPanel" class="hidden py-12 bg-dark-card border-t border-b border-neon/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-dark-lighter rounded-2xl p-6 border border-dark-border">
+                    <div class="flex flex-wrap items-center justify-between pb-4 border-b border-dark-border mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-neon text-black font-extrabold flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h3 id="dashTitle" class="font-heading text-xl font-extrabold text-white">Panel Khusus Pengelola</h3>
+                                <p id="dashSubtitle" class="text-xs text-gray-400">Welcome Admin / Kepala Sekolah</p>
+                            </div>
+                        </div>
+                        <span id="roleBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-neon text-black">Mode Akses Terverifikasi</span>
+                    </div>
+
+                    <!-- Dynamic Dashboard Stats -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="p-4 rounded-xl bg-dark-card border border-dark-border">
+                            <span class="text-xs text-gray-400 block font-semibold">Total Kehadiran Hari Ini</span>
+                            <span class="text-2xl font-heading font-black text-neon" id="totalAttendanceCount">3</span>
+                            <span class="text-[10px] text-gray-400 block">Peserta & Pemateri</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-dark-card border border-dark-border">
+                            <span class="text-xs text-gray-400 block font-semibold">Kelayakan Modul</span>
+                            <span class="text-2xl font-heading font-black text-white">100% Valid</span>
+                            <span class="text-[10px] text-green-400 block">Sesuai Kurikulum ITS</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-dark-card border border-dark-border">
+                            <span class="text-xs text-gray-400 block font-semibold">Program Vokasi Aktif</span>
+                            <span class="text-2xl font-heading font-black text-neon">6 Kelompok</span>
+                            <span class="text-[10px] text-gray-400 block">SMAN 1 Sumber</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-dark-card border border-dark-border">
+                            <span class="text-xs text-gray-400 block font-semibold">Status Monitoring Kepsek</span>
+                            <span class="text-2xl font-heading font-black text-green-400">Disetujui</span>
+                            <span class="text-[10px] text-gray-400 block">Laporan Bulanan Aktif</span>
+                        </div>
+                    </div>
+
+                    <!-- Kepsek / Admin Actions -->
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="showToast('Laporan Kehadiran Berhasil Diunduh (PDF)', 'success')" class="bg-neon text-black font-bold px-4 py-2 rounded-xl text-xs hover:bg-neon-hover flex items-center gap-2">
+                            <i class="fa-solid fa-file-pdf"></i> Unduh Rekap Presensi PDF
+                        </button>
+                        <button onclick="showToast('Modul Pelatihan Berhasil Diverifikasi oleh Kepala Sekolah', 'info')" class="bg-dark-card border border-dark-border text-white font-bold px-4 py-2 rounded-xl text-xs hover:border-neon flex items-center gap-2">
+                            <i class="fa-solid fa-check-double text-neon"></i> Verifikasi Jurnal Pemateri
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Media Hub Section -->
+        <section id="sosmed" class="py-16 bg-dark-card border-t border-dark-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-neon mb-2">Koneksi Komunitas</h2>
+                    <h3 class="font-heading text-3xl font-extrabold text-white">Media Sosial D'Tengger</h3>
+                    <p class="text-gray-400 text-sm mt-2">Ikuti keseruan praktik, karya siswa, dan tutorial vokasi SMAN 1 Sumber</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- TikTok Card -->
+                    <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="group bg-dark-base border border-dark-border hover:border-neon p-6 rounded-2xl transition-all duration-300 flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-black text-white flex items-center justify-center text-2xl group-hover:bg-neon group-hover:text-black transition-colors shadow-lg">
+                            <i class="fa-brands fa-tiktok"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-base group-hover:text-neon transition-colors">TikTok Official</h4>
+                            <p class="text-xs text-gray-400">@dtengger_smansaber</p>
+                            <span class="text-[11px] text-neon font-medium mt-1 inline-block">Tonton Video Pendek &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- Instagram Card -->
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="group bg-dark-base border border-dark-border hover:border-neon p-6 rounded-2xl transition-all duration-300 flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 text-white flex items-center justify-center text-2xl group-hover:scale-105 transition-transform shadow-lg">
+                            <i class="fa-brands fa-instagram"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-base group-hover:text-neon transition-colors">Instagram Galeri</h4>
+                            <p class="text-xs text-gray-400">@doubletrack_smansumber</p>
+                            <span class="text-[11px] text-neon font-medium mt-1 inline-block">Lihat Foto Karya &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- YouTube Card -->
+                    <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="group bg-dark-base border border-dark-border hover:border-neon p-6 rounded-2xl transition-all duration-300 flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-red-600 text-white flex items-center justify-center text-2xl group-hover:bg-neon group-hover:text-black transition-colors shadow-lg">
+                            <i class="fa-brands fa-youtube"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-base group-hover:text-neon transition-colors">YouTube Channel</h4>
+                            <p class="text-xs text-gray-400">Double Track SMAN 1 Sumber</p>
+                            <span class="text-[11px] text-neon font-medium mt-1 inline-block">Dokumentasi Pelatihan &rarr;</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-base border-t border-dark-border py-10 text-gray-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-neon text-black font-extrabold flex items-center justify-center font-heading">
+                    DT
+                </div>
+                <div>
+                    <span class="font-bold text-white text-sm">D'Tengger SMAN 1 Sumber</span>
+                    <p class="text-[11px]">Kabupaten Probolinggo, Jawa Timur</p>
+                </div>
+            </div>
+
+            <p class="text-center md:text-right">
+                &copy; 2026 Double Track SMAN 1 Sumber. All Rights Reserved. <br/>
+                <span class="text-gray-500">Dikembangkan untuk Program Kewirausahaan & Vokasi Tengger.</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modal Login Portal (Admin & Kepala Sekolah) -->
+    <div id="loginModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-card border border-neon/40 rounded-2xl max-w-md w-full p-6 shadow-2xl relative animate-fadeIn">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-neon text-black rounded-xl mx-auto flex items-center justify-center text-2xl font-black mb-3 shadow-[0_0_15px_rgba(227,255,0,0.4)]">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="font-heading text-2xl font-extrabold text-white">Login Portal D'Tengger</h3>
+                <p class="text-xs text-gray-400 mt-1">Pilih peran akses pengelola website</p>
+            </div>
+
+            <!-- Role Selector Tabs inside Login -->
+            <div class="grid grid-cols-2 gap-2 mb-6 p-1 bg-dark-base rounded-xl border border-dark-border">
+                <button type="button" id="roleBtnAdmin" onclick="setLoginRole('admin')" class="py-2 text-xs font-bold rounded-lg transition-all bg-neon text-black">
+                    <i class="fa-solid fa-user-gear mr-1"></i> Admin / Pengelola
+                </button>
+                <button type="button" id="roleBtnKepsek" onclick="setLoginRole('kepsek')" class="py-2 text-xs font-bold text-gray-400 hover:text-white rounded-lg transition-all">
+                    <i class="fa-solid fa-user-tie mr-1"></i> Kepala Sekolah
+                </button>
+            </div>
+
+            <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                <input type="hidden" id="selectedRole" value="admin">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Username / NIP</label>
+                    <input type="text" id="loginUsername" placeholder="Masukkan username admin / Kepsek" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Kata Sandi</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                </div>
+
+                <div class="p-3 bg-neon/10 rounded-xl border border-neon/20 text-[11px] text-gray-300">
+                    <i class="fa-solid fa-circle-info text-neon mr-1"></i>
+                    <span>Mode Demo: Klik <strong>Masuk Portal</strong> secara langsung untuk simulasi hak akses.</span>
+                </div>
+
+                <button type="submit" class="w-full bg-neon text-black font-extrabold py-3 rounded-xl hover:bg-neon-hover transition-all duration-300 neon-shadow">
+                    Masuk Portal D'Tengger
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Skill Details -->
+    <div id="skillDetailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-card border border-dark-border rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="closeSkillModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="modalSkillTitle" class="font-heading text-2xl font-extrabold text-neon mb-2">Detail Keahlian</h3>
+            <p class="text-xs text-gray-400 mb-4">Materi Pelatihan Double Track SMAN 1 Sumber</p>
+
+            <div class="space-y-3 mb-6" id="modalSkillContent">
+                <!-- Dynamic Content via JS -->
+            </div>
+
+            <button onclick="closeSkillModal()" class="w-full bg-dark-lighter hover:bg-dark-border text-white font-bold py-2.5 rounded-xl text-sm border border-dark-border transition-colors">
+                Tutup Info
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Open Access Upload Galeri (Foto & Video) -->
+    <div id="uploadGalleryModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-card border border-neon/40 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto">
+            <button onclick="closeUploadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-neon text-black rounded-xl mx-auto flex items-center justify-center text-2xl font-black mb-3 shadow-[0_0_15px_rgba(227,255,0,0.4)]">
+                    <i class="fa-solid fa-photo-film"></i>
+                </div>
+                <h3 class="font-heading text-2xl font-extrabold text-white">Unggah Karya / Dokumentasi</h3>
+                <p class="text-xs text-gray-400 mt-1">Form Open Access: Publikasikan foto atau video kegiatan vokasi Double Track</p>
+            </div>
+
+            <form onsubmit="handleGallerySubmit(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Tipe Media</label>
+                        <select id="galMediaType" onchange="toggleMediaInputType()" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                            <option value="photo"><i class="fa-solid fa-image"></i> Foto Karya</option>
+                            <option value="video"><i class="fa-solid fa-video"></i> Video Praktik / Youtube Embed</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Bidang Keterampilan</label>
+                        <select id="galCategory" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                            <option value="Multimedia">Multimedia</option>
+                            <option value="Tata Boga">Tata Boga</option>
+                            <option value="Tata Rias">Tata Rias</option>
+                            <option value="Tata Busana">Tata Busana</option>
+                            <option value="Perawatan Elektronika">Perawatan Elektronika</option>
+                            <option value="Tune Up Motor">Tune Up Motor</option>
+                            <option value="Lainnya">Kegiatan Umum / Pameran</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Judul Karya / Praktik</label>
+                    <input type="text" id="galTitle" placeholder="Contoh: Hasil Praktik Pembuatan Roti Pastry Bromo" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Nama Pembuat / Siswa</label>
+                        <input type="text" id="galAuthor" placeholder="Contoh: Rendi / Kelompok 2 Boga" required class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Sumber File / Tautan</label>
+                        <select id="galInputMode" onchange="toggleInputModeFields()" class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                            <option value="file">Unggah File Langsung (Gambar)</option>
+                            <option value="url">URL Gambar / Video Embed Link</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- File Upload Container -->
+                <div id="fileUploadGroup" class="space-y-1">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Pilih File Gambar (JPG / PNG / WEBP)</label>
+                    <div class="relative border-2 border-dashed border-dark-border hover:border-neon/50 rounded-xl p-4 text-center bg-dark-lighter cursor-pointer">
+                        <input type="file" id="galFileInput" accept="image/*" onchange="previewSelectedImage(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <i class="fa-solid fa-cloud-arrow-up text-2xl text-neon mb-1 block"></i>
+                        <span class="text-xs text-gray-300 font-semibold block" id="fileNameDisplay">Klik atau seret gambar ke sini</span>
+                        <span class="text-[10px] text-gray-400">Maksimal 5MB. Otomatis disimulasikan ke galeri.</span>
+                    </div>
+                    <!-- Image Preview Container -->
+                    <div id="imagePreviewBox" class="hidden mt-2 rounded-xl overflow-hidden max-h-36 border border-neon/30">
+                        <img id="imgPreviewTarget" src="" class="w-full h-36 object-cover" alt="Preview Gambar">
+                    </div>
+                </div>
+
+                <!-- URL Link Input Container (Video Embed or Image Link) -->
+                <div id="urlUploadGroup" class="hidden space-y-1">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">URL Gambar / Link Video YouTube (Embed ID)</label>
+                    <input type="url" id="galUrlInput" placeholder="https://images.unsplash.com/... atau https://www.youtube.com/embed/..." class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon">
+                    <p class="text-[10px] text-gray-400">Untuk Video YouTube: Gunakan URL format embed e.g. <code>https://www.youtube.com/embed/VIDEO_ID</code></p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Deskripsi & Keterangan Tambahan</label>
+                    <textarea id="galDescription" rows="3" placeholder="Jelaskan proses pembuatan, alat yang digunakan, atau cerita dibalik karya ini..." class="w-full bg-dark-lighter border border-dark-border text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-neon"></textarea>
+                </div>
+
+                <div class="p-3 bg-neon/10 rounded-xl border border-neon/30 text-[11px] text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-earth-americas text-neon text-base"></i>
+                    <span>Akses Terbuka: Foto & video yang Anda publikasikan akan langsung tampil di Galeri Resmi SMAN 1 Sumber.</span>
+                </div>
+
+                <button type="submit" class="w-full bg-neon text-black font-extrabold py-3 rounded-xl hover:bg-neon-hover transition-all duration-300 neon-shadow flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Publikasikan Ke Galeri
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Media Lightbox / Preview Fullscreen -->
+    <div id="mediaPreviewModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-dark-card border border-dark-border rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl relative animate-fadeIn flex flex-col max-h-[90vh]">
+            <button onclick="closeMediaPreview()" class="absolute top-4 right-4 z-10 bg-black/60 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Lightbox Media Area -->
+            <div class="bg-black flex items-center justify-center min-h-[280px] max-h-[500px] overflow-hidden relative" id="previewMediaContainer">
+                <!-- Image or Video populated via JS -->
+            </div>
+
+            <!-- Lightbox Metadata Details -->
+            <div class="p-6 bg-dark-card border-t border-dark-border">
+                <div class="flex items-center justify-between mb-2">
+                    <span id="previewCategoryBadge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-neon/10 text-neon border border-neon/30">
+                        Kategori
+                    </span>
+                    <button id="previewLikeBtn" onclick="" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-dark-lighter border border-dark-border hover:border-red-500 hover:text-red-400 text-xs font-bold text-gray-300 transition-colors">
+                        <i class="fa-solid fa-heart text-red-500"></i>
+                        <span id="previewLikeCount">0</span> Suka
+                    </button>
+                </div>
+
+                <h3 id="previewTitle" class="font-heading text-xl font-extrabold text-white mb-1">Judul Karya</h3>
+                <p id="previewAuthor" class="text-xs text-neon font-mono mb-3">Oleh: Nama Siswa</p>
+                <p id="previewDesc" class="text-xs text-gray-300 leading-relaxed">Deskripsi karya...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // State Management
+        let currentUser = null; // null | { role: 'admin' | 'kepsek', username: string }
+        let currentImageBase64 = null;
+
+        // Open Access Gallery Seed Data
+        let galleryItems = [
+            {
+                id: 'gal-1',
+                type: 'photo',
+                category: 'Tata Boga',
+                title: 'Praktik Pembuatan Pastry Roti Bromo',
+                author: 'Siti Rahma & Kelompok 1',
+                url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
+                description: 'Pelatihan pembuatan pastry dan bakery ala resto modern menggunakan komoditas lokal hasil pertanian Tengger.',
+                likes: 24,
+                date: ' Hari Ini'
+            },
+            {
+                id: 'gal-2',
+                type: 'video',
+                category: 'Tune Up Motor',
+                title: 'Tutorial Servis System EFI & Injeksi Motor',
+                author: 'Tim Otomotif SMANSABER',
+                url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Demo video placeholder link
+                thumbnail: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80',
+                description: 'Dokumentasi langkah-langkah diagnostik dan tune-up sepeda motor matic injeksi pada unit praktik vokasi.',
+                likes: 38,
+                date: ' Kemarin'
+            },
+            {
+                id: 'gal-3',
+                type: 'photo',
+                category: 'Multimedia',
+                title: 'Sesi Sesi Photo Hunting Landscape Tengger',
+                author: 'Rian Pratama (Siswa Multimedia)',
+                url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80',
+                description: 'Praktik lapangan fotografi outdoor pencahayaan alami serta teknik komposisi landscape pegunungan Sumber Bromo.',
+                likes: 42,
+                date: ' 2 Hari Lalu'
+            },
+            {
+                id: 'gal-4',
+                type: 'photo',
+                category: 'Tata Rias',
+                title: 'Hasil Rias Pengantin Hijab Modern',
+                author: 'Dewi & Tim Tata Rias',
+                url: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80',
+                description: 'Karya rias panggung dan pengantin gaya hijab modern dengan perpaduan ornamen tradisional busana adat.',
+                likes: 19,
+                date: ' 3 Hari Lalu'
+            },
+            {
+                id: 'gal-5',
+                type: 'photo',
+                category: 'Tata Busana',
+                title: 'Proses Pembuatan Pola & Menjahit Gaun',
+                author: 'Nabila XI-IPS',
+                url: 'https://images.unsplash.com/photo-1528458876861-544fd1761a91?auto=format&fit=crop&w=800&q=80',
+                description: 'Siswa memperagakan proses memotong kain sesuai pola rancangan busana muslim modern siap pakai.',
+                likes: 31,
+                date: ' 4 Hari Lalu'
+            },
+            {
+                id: 'gal-6',
+                type: 'photo',
+                category: 'Perawatan Elektronika',
+                title: 'Perbaikan PCB & Solder Peralatan Rumah',
+                author: 'Hendra & Fikri Elektro',
+                url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+                description: 'Praktik pemeriksaan komponen mati dan penyolderan ulang jalur sirkuit audio amplifier.',
+                likes: 15,
+                date: ' 5 Hari Lalu'
+            }
+        ];
+
+        let activeFilterType = 'all';
+
+        // Render Gallery Items
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            const searchVal = document.getElementById('gallerySearchInput')?.value.toLowerCase() || '';
+
+            const filtered = galleryItems.filter(item => {
+                const matchesType = (activeFilterType === 'all' || item.type === activeFilterType);
+                const matchesSearch = item.title.toLowerCase().includes(searchVal) ||
+                                      item.author.toLowerCase().includes(searchVal) ||
+                                      item.category.toLowerCase().includes(searchVal);
+                return matchesType && matchesSearch;
+            });
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-dark-card rounded-2xl border border-dark-border">
+                        <i class="fa-solid fa-photo-film text-4xl text-gray-500 mb-3"></i>
+                        <p class="text-white font-bold text-base">Belum Ada Media dalam Kategori Ini</p>
+                        <p class="text-xs text-gray-400 mt-1">Jadilah yang pertama mengunggah dokumentasi melalui tombol Unggah Karya!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const isVideo = item.type === 'video';
+                const mediaThumb = isVideo ? (item.thumbnail || 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80') : item.url;
+
+                return `
+                    <div class="group bg-dark-card border border-dark-border hover:border-neon/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-lg flex flex-col justify-between">
+                        <!-- Media Header & Image -->
+                        <div class="relative overflow-hidden aspect-video bg-black cursor-pointer" onclick="openMediaPreview('${item.id}')">
+                            <img src="${mediaThumb}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/131A26/E3FF00?text=Dokumentasi+DT'">
+                            
+                            <!-- Badges -->
+                            <div class="absolute top-3 left-3 flex gap-2">
+                                <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isVideo ? 'bg-red-600 text-white' : 'bg-neon text-black'} shadow">
+                                    <i class="fa-solid ${isVideo ? 'fa-play mr-1' : 'fa-camera mr-1'}"></i> ${isVideo ? 'Video' : 'Foto'}
+                                </span>
+                                <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-black/70 text-gray-200 backdrop-blur-sm border border-white/10">
+                                    ${item.category}
+                                </span>
+                            </div>
+
+                            ${isVideo ? `
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
+                                    <div class="w-12 h-12 rounded-full bg-neon text-black flex items-center justify-center text-xl shadow-[0_0_15px_rgba(227,255,0,0.6)] group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-play ml-0.5"></i>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Content Body -->
+                        <div class="p-5 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-white text-base group-hover:text-neon transition-colors line-clamp-1 cursor-pointer" onclick="openMediaPreview('${item.id}')">
+                                    ${item.title}
+                                </h4>
+                                <p class="text-xs text-neon/90 font-mono mt-0.5 mb-2">
+                                    <i class="fa-solid fa-user-pen mr-1"></i> ${item.author}
+                                </p>
+                                <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                                    ${item.description}
+                                </p>
+                            </div>
+
+                            <!-- Card Footer Action -->
+                            <div class="pt-4 mt-4 border-t border-dark-border flex items-center justify-between">
+                                <button onclick="likeGalleryItem('${item.id}')" class="flex items-center gap-1.5 text-xs text-gray-300 hover:text-red-400 transition-colors font-semibold">
+                                    <i class="fa-solid fa-heart text-red-500"></i>
+                                    <span>${item.likes}</span> Suka
+                                </button>
+
+                                <button onclick="openMediaPreview('${item.id}')" class="text-xs text-neon hover:underline font-bold flex items-center gap-1">
+                                    <span>Lihat Media</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filter Gallery Handler
+        function filterGallery(typeFilter, value) {
+            activeFilterType = value;
+            const buttons = document.querySelectorAll('.gallery-type-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-neon', 'text-black');
+                btn.classList.add('bg-dark-lighter', 'text-gray-300');
+            });
+            event.currentTarget.classList.remove('bg-dark-lighter', 'text-gray-300');
+            event.currentTarget.classList.add('bg-neon', 'text-black');
+
+            renderGallery();
+        }
+
+        function searchGallery() {
+            renderGallery();
+        }
+
+        // Open Access Upload Modal Functions
+        function openUploadModal() {
+            document.getElementById('uploadGalleryModal').classList.remove('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadGalleryModal').classList.add('hidden');
+            currentImageBase64 = null;
+            document.getElementById('imagePreviewBox').classList.add('hidden');
+            document.getElementById('fileNameDisplay').innerText = 'Klik atau seret gambar ke sini';
+        }
+
+        function toggleMediaInputType() {
+            const mediaType = document.getElementById('galMediaType').value;
+            const inputModeSelect = document.getElementById('galInputMode');
+            if (mediaType === 'video') {
+                inputModeSelect.value = 'url';
+                toggleInputModeFields();
+            }
+        }
+
+        function toggleInputModeFields() {
+            const mode = document.getElementById('galInputMode').value;
+            const fileGroup = document.getElementById('fileUploadGroup');
+            const urlGroup = document.getElementById('urlUploadGroup');
+
+            if(mode === 'file') {
+                fileGroup.classList.remove('hidden');
+                urlGroup.classList.add('hidden');
+            } else {
+                fileGroup.classList.add('hidden');
+                urlGroup.classList.remove('hidden');
+            }
+        }
+
+        function previewSelectedImage(event) {
+            const file = event.target.files[0];
+            if(file) {
+                document.getElementById('fileNameDisplay').innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageBase64 = e.target.result;
+                    document.getElementById('imgPreviewTarget').src = currentImageBase64;
+                    document.getElementById('imagePreviewBox').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleGallerySubmit(e) {
+            e.preventDefault();
+
+            const mediaType = document.getElementById('galMediaType').value;
+            const category = document.getElementById('galCategory').value;
+            const title = document.getElementById('galTitle').value;
+            const author = document.getElementById('galAuthor').value;
+            const description = document.getElementById('galDescription').value || 'Dokumentasi karya vokasi siswa SMAN 1 Sumber.';
+            const inputMode = document.getElementById('galInputMode').value;
+            let finalUrl = '';
+
+            if (inputMode === 'file' && currentImageBase64) {
+                finalUrl = currentImageBase64;
+            } else {
+                const urlVal = document.getElementById('galUrlInput').value;
+                if (urlVal) {
+                    finalUrl = urlVal;
+                } else {
+                    finalUrl = mediaType === 'video' 
+                        ? 'https://www.youtube.com/embed/dQw4w9WgXcQ' 
+                        : 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80';
+                }
+            }
+
+            const newItem = {
+                id: 'gal-' + Date.now(),
+                type: mediaType,
+                category: category,
+                title: title,
+                author: author,
+                url: finalUrl,
+                thumbnail: finalUrl,
+                description: description,
+                likes: 1,
+                date: ' Baru Saja'
+            };
+
+            galleryItems.unshift(newItem);
+            renderGallery();
+            closeUploadModal();
+            showToast(`Karya "${title}" berhasil ditambahkan ke Galeri!`, 'success');
+
+            // Scroll to gallery section smooth
+            document.getElementById('galeri').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function likeGalleryItem(id) {
+            const item = galleryItems.find(g => g.id === id);
+            if(item) {
+                item.likes += 1;
+                renderGallery();
+                showToast(`Menyukai karya "${item.title}"`, 'success');
+            }
+        }
+
+        // Preview Lightbox Modal
+        function openMediaPreview(id) {
+            const item = galleryItems.find(g => g.id === id);
+            if(!item) return;
+
+            const container = document.getElementById('previewMediaContainer');
+            if(item.type === 'video') {
+                container.innerHTML = `
+                    <iframe src="${item.url}?autoplay=1" title="${item.title}" class="w-full h-80 sm:h-96 border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                `;
+            } else {
+                container.innerHTML = `
+                    <img src="${item.url}" alt="${item.title}" class="w-full h-full object-contain max-h-[500px]" onerror="this.src='https://placehold.co/800x600/131A26/E3FF00?text=Gambar+Karya'">
+                `;
+            }
+
+            document.getElementById('previewCategoryBadge').innerText = `${item.category} • ${item.type.toUpperCase()}`;
+            document.getElementById('previewTitle').innerText = item.title;
+            document.getElementById('previewAuthor').innerText = `Diunggah oleh: ${item.author} (${item.date})`;
+            document.getElementById('previewDesc').innerText = item.description;
+            document.getElementById('previewLikeCount').innerText = item.likes;
+
+            const likeBtn = document.getElementById('previewLikeBtn');
+            likeBtn.onclick = function() {
+                item.likes += 1;
+                document.getElementById('previewLikeCount').innerText = item.likes;
+                renderGallery();
+                showToast(`Menyukai karya "${item.title}"`, 'success');
+            };
+
+            document.getElementById('mediaPreviewModal').classList.remove('hidden');
+        }
+
+        function closeMediaPreview() {
+            document.getElementById('mediaPreviewModal').classList.add('hidden');
+            document.getElementById('previewMediaContainer').innerHTML = '';
+        }
+
+        // Initialize Gallery on DOM Content Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderGallery();
+        });
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Skill Filter Tabs Logic
+        function switchSkillTab(category) {
+            // Update active button styling
+            const buttons = document.querySelectorAll('#skillTabs button');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-neon', 'text-black');
+                btn.classList.add('bg-dark-lighter', 'text-gray-300');
+            });
+
+            event.currentTarget.classList.remove('bg-dark-lighter', 'text-gray-300');
+            event.currentTarget.classList.add('bg-neon', 'text-black');
+
+            // Filter Skill Cards
+            const cards = document.querySelectorAll('.skill-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(`category-${category}`)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Skill Detail Modal
+        function showSkillDetail(title, subSkills) {
+            document.getElementById('modalSkillTitle').innerText = title;
+            const container = document.getElementById('modalSkillContent');
+            
+            let listHTML = `<p class="text-xs font-semibold text-white">Sub-Bidang & Silabus Kurikulum:</p><ul class="space-y-2">`;
+            subSkills.forEach(skill => {
+                listHTML += `
+                    <li class="flex items-start gap-2 text-xs text-gray-300 bg-dark-base p-2.5 rounded-lg border border-dark-border">
+                        <i class="fa-solid fa-check text-neon mt-0.5"></i>
+                        <span>${skill}</span>
+                    </li>
+                `;
+            });
+            listHTML += `</ul>`;
+
+            container.innerHTML = listHTML;
+            document.getElementById('skillDetailModal').classList.remove('hidden');
+        }
+
+        function closeSkillModal() {
+            document.getElementById('skillDetailModal').classList.add('hidden');
+        }
+
+        // Login Modal Logic
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function setLoginRole(role) {
+            document.getElementById('selectedRole').value = role;
+            const btnAdmin = document.getElementById('roleBtnAdmin');
+            const btnKepsek = document.getElementById('roleBtnKepsek');
+
+            if(role === 'admin') {
+                btnAdmin.className = "py-2 text-xs font-bold rounded-lg transition-all bg-neon text-black";
+                btnKepsek.className = "py-2 text-xs font-bold text-gray-400 hover:text-white rounded-lg transition-all";
+            } else {
+                btnKepsek.className = "py-2 text-xs font-bold rounded-lg transition-all bg-neon text-black";
+                btnAdmin.className = "py-2 text-xs font-bold text-gray-400 hover:text-white rounded-lg transition-all";
+            }
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const role = document.getElementById('selectedRole').value;
+            const username = document.getElementById('loginUsername').value || (role === 'admin' ? 'Admin SMAN 1 Sumber' : 'Kepala Sekolah');
+
+            currentUser = { role, username };
+            updateUserUI();
+            closeLoginModal();
+
+            showToast(`Berhasil masuk sebagai ${role === 'admin' ? 'Admin Double Track' : 'Kepala Sekolah SMAN 1 Sumber'}`, 'success');
+        }
+
+        function updateUserUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const badge = document.getElementById('userStatusBadge');
+            const dashboard = document.getElementById('dashboardPanel');
+            const dashTitle = document.getElementById('dashTitle');
+            const dashSubtitle = document.getElementById('dashSubtitle');
+
+            if(currentUser) {
+                loginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                badge.classList.remove('hidden');
+                badge.innerHTML = `<i class="fa-solid fa-user-check text-neon mr-1"></i> ${currentUser.role === 'admin' ? 'Admin' : 'Kepala Sekolah'}`;
+                
+                dashboard.classList.remove('hidden');
+                if(currentUser.role === 'admin') {
+                    dashTitle.innerText = "Panel Administrator D'Tengger";
+                    dashSubtitle.innerText = "Pengelolaan Data Presensi, Modul Pelatihan, & Instruktur";
+                } else {
+                    dashTitle.innerText = "Panel Monitoring Kepala Sekolah";
+                    dashSubtitle.innerText = "Evaluasi Pelaksanaan Program Double Track SMAN 1 Sumber";
+                }
+            } else {
+                loginBtn.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+                badge.classList.add('hidden');
+                dashboard.classList.add('hidden');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            updateUserUI();
+            showToast('Anda telah keluar dari sistem pengelola', 'info');
+        }
+
+        // Attendance Submission Handler
+        function handleAttendanceSubmit(e) {
+            e.preventDefault();
+
+            const role = document.getElementById('attRole').value;
+            const name = document.getElementById('attName').value;
+            const category = document.getElementById('attCategory').value;
+            const topic = document.getElementById('attTopic').value;
+            const status = document.querySelector('input[name="attStatus"]:checked').value;
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+
+            // Create new row
+            const tbody = document.getElementById('attendanceLogBody');
+            const newRow = document.createElement('tr');
+            newRow.className = 'hover:bg-dark-lighter/50 transition-colors animate-fadeIn';
+
+            let statusBadge = '';
+            if (status === 'Hadir') {
+                statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">Hadir</span>`;
+            } else if (status === 'Izin') {
+                statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">Izin</span>`;
+            } else {
+                statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">Sakit</span>`;
+            }
+
+            let roleBadge = role === 'Pemateri' 
+                ? `<span class="text-[10px] px-1.5 py-0.2 bg-neon/10 text-neon rounded">Pemateri</span>`
+                : `<span class="text-[10px] px-1.5 py-0.2 bg-blue-500/10 text-blue-400 rounded">${role}</span>`;
+
+            newRow.innerHTML = `
+                <td class="p-3 font-mono text-gray-400">${timeStr}</td>
+                <td class="p-3">
+                    <div class="font-bold text-white">${name}</div>
+                    ${roleBadge}
+                </td>
+                <td class="p-3">${category}</td>
+                <td class="p-3">${topic}</td>
+                <td class="p-3 text-center">${statusBadge}</td>
+            `;
+
+            tbody.insertBefore(newRow, tbody.firstChild);
+
+            // Reset Form & Show Toast
+            document.getElementById('attName').value = '';
+            document.getElementById('attTopic').value = '';
+
+            // Update Counter
+            const countElem = document.getElementById('totalAttendanceCount');
+            countElem.innerText = parseInt(countElem.innerText) + 1;
+
+            showToast(`Presensi ${name} berhasil dicatat!`, 'success');
+        }
+
+        // Table Search / Filter
+        function filterTable() {
+            const input = document.getElementById('tableSearch');
+            const filter = input.value.toLowerCase();
+            const rows = document.querySelectorAll('#attendanceLogBody tr');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function clearAttendanceLog() {
+            document.getElementById('attendanceLogBody').innerHTML = '';
+            showToast('Log presensi dibersihkan', 'info');
+        }
+
+        // Custom Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            let borderClass = 'border-neon';
+            let iconClass = 'fa-circle-info text-neon';
+
+            if (type === 'success') {
+                borderClass = 'border-green-400';
+                iconClass = 'fa-circle-check text-green-400';
+            }
+
+            toast.className = `bg-dark-card border ${borderClass} text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs font-semibold transition-all duration-300 transform translate-y-2 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid ${iconClass} text-base"></i> <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            // Remove Toast
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
